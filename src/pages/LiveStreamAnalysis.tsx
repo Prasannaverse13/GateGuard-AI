@@ -1,0 +1,145 @@
+import React, { useState } from 'react';
+import { Link, BarChart3, AlertTriangle, Users, Camera } from 'lucide-react';
+import LiveStreamProcessor from '../components/LiveStreamProcessor';
+import AlertsList from '../components/AlertsList';
+import { useAlertContext } from '../context/AlertContext';
+import { useAIContext } from '../context/AIContext';
+
+const LiveStreamAnalysis: React.FC = () => {
+  const { alerts } = useAlertContext();
+  const { detections } = useAIContext();
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  
+  // Filter alerts related to live stream analysis
+  const streamAlerts = alerts.filter(alert => 
+    alert.cameraId === 'live-stream' || 
+    (isAnalyzing && new Date(alert.timestamp) > new Date(Date.now() - 60000))
+  );
+
+  return (
+    <div className="p-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Live Stream Analysis</h1>
+          <p className="text-gray-400">Monitor and analyze video streams in real-time</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="lg:col-span-2">
+          <LiveStreamProcessor 
+            onProcessingStart={() => setIsAnalyzing(true)}
+            onProcessingEnd={() => setIsAnalyzing(false)}
+          />
+        </div>
+
+        <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="p-4 border-b border-gray-700">
+            <h2 className="font-semibold flex items-center">
+              <AlertTriangle className="h-5 w-5 mr-2 text-yellow-500" />
+              Stream Alerts
+            </h2>
+          </div>
+          <div>
+            {streamAlerts.length > 0 ? (
+              <AlertsList alerts={streamAlerts} />
+            ) : (
+              <div className="text-center py-8 text-gray-400">
+                <AlertTriangle className="h-12 w-12 mx-auto mb-3 text-gray-500" />
+                <p>No alerts from stream analysis yet</p>
+                {!isAnalyzing && (
+                  <p className="text-sm mt-2">Start analyzing a stream to detect security events</p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="p-4 border-b border-gray-700">
+            <h2 className="font-semibold flex items-center">
+              <BarChart3 className="h-5 w-5 mr-2 text-blue-500" />
+              Analysis Results
+            </h2>
+          </div>
+          <div className="p-4">
+            {isAnalyzing ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-gray-900 p-4 rounded-lg">
+                  <h3 className="text-lg font-medium mb-2">People Detected</h3>
+                  <div className="text-3xl font-bold">
+                    {detections.filter(d => d.cameraId === 'live-stream' && d.type === 'person').length}
+                  </div>
+                </div>
+                
+                <div className="bg-gray-900 p-4 rounded-lg">
+                  <h3 className="text-lg font-medium mb-2">Anomalies</h3>
+                  <div className="text-3xl font-bold text-yellow-500">
+                    {detections.filter(d => d.cameraId === 'live-stream' && d.isAnomaly).length}
+                  </div>
+                </div>
+                
+                <div className="bg-gray-900 p-4 rounded-lg">
+                  <h3 className="text-lg font-medium mb-2">Confidence</h3>
+                  <div className="text-3xl font-bold text-green-500">
+                    {detections.filter(d => d.cameraId === 'live-stream').length > 0 
+                      ? Math.round(detections.filter(d => d.cameraId === 'live-stream').reduce((sum, d) => sum + d.confidence, 0) / detections.filter(d => d.cameraId === 'live-stream').length * 100) 
+                      : 0}%
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-400">
+                <Camera className="h-12 w-12 mx-auto mb-3 text-gray-500" />
+                <p>Connect to a stream and start analysis to see results</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="p-4 border-b border-gray-700">
+            <h2 className="font-semibold flex items-center">
+              <Users className="h-5 w-5 mr-2 text-green-500" />
+              Stream Instructions
+            </h2>
+          </div>
+          <div className="p-4">
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-medium mb-2">How to Use Google Drive Videos</h3>
+                <ol className="list-decimal list-inside space-y-2 text-gray-300">
+                  <li>Upload your video to Google Drive</li>
+                  <li>Right-click the video and select "Share"</li>
+                  <li>Set access to "Anyone with the link"</li>
+                  <li>Copy the share link</li>
+                  <li>Paste the link in the stream URL field above</li>
+                </ol>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium mb-2">Supported URL Types</h3>
+                <ul className="list-disc list-inside space-y-1 text-gray-300">
+                  <li>Google Drive shared video links</li>
+                  <li>Direct MP4/WebM video URLs</li>
+                  <li>YouTube video links (public videos only)</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-900 p-3 rounded-lg">
+                <p className="text-sm text-gray-400">
+                  <strong>Note:</strong> For optimal performance, use direct video links when possible. 
+                  Some video hosting services may have restrictions on embedding or streaming.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LiveStreamAnalysis;
