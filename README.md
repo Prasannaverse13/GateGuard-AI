@@ -1,6 +1,6 @@
 # GateGuard AI - Security Monitoring System
 
-GateGuard AI is an advanced security monitoring system that uses artificial intelligence to enhance venue security and access management. The system provides real-time monitoring, anomaly detection, and demographic analysis to help security personnel maintain safety and optimize operations.
+GateGuard AI is an advanced security monitoring system that uses AI to enhance venue security and access management. The system provides real-time monitoring, anomaly detection, and demographic analysis to help security personnel maintain safety and optimize operations.
 
 ![GateGuard AI Dashboard](https://images.unsplash.com/photo-1557597774-9d273605dfa9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&q=80)
 
