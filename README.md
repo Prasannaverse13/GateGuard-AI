@@ -2,7 +2,8 @@
 
 GateGuard AI is an advanced security monitoring system that uses AI to enhance venue security and access management. The system provides real-time monitoring, anomaly detection, and demographic analysis to help security personnel maintain safety and optimize operations.
 
-![GateGuard AI Dashboard](https://images.unsplash.com/photo-1557597774-9d273605dfa9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&q=80)
+![GateGuard AI Dashboard](https://github.com/user-attachments/assets/c218718b-9750-4aa0-8cb9-c6b0eba8ee9a)
+
 
 ## Features
 
@@ -289,10 +290,6 @@ To enable AI processing with the Nx Meta Platform:
 - `src/components/FaceDetectionProcessor.tsx`: Face detection implementation
 - `src/components/DetectionOverlay.tsx`: Visualization of AI detections
 - `src/pages/LiveMonitoring.tsx`: Main monitoring interface
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
